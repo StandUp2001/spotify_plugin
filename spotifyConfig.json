@@ -1,0 +1,21 @@
+{
+    "name": "Spotify",
+    "description": "Spotify plugin for GrayJay",
+    "author": "StandUp2001",
+    "authorUrl": "https://github.com/StandUp2001",
+    "sourceUrl": "https://github.com/StandUp2001/",
+    "repositoryUrl": "https://github.com/someuser/someproject",
+    "scriptUrl": "./SomeScript.js",
+    "version": 1,
+    "iconUrl": "./someimage.png",
+    "id": "309b2e83-7ede-4af8-8ee9-822bc4647a24",
+    "scriptSignature": "<ommitted>",
+    "scriptPublicKey": "<ommitted>",
+    "packages": [
+        "Http"
+    ],
+    "allowEval": false,
+    "allowUrls": [
+        "everywhere"
+    ]
+}
