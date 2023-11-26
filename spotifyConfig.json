@@ -3,7 +3,7 @@
     "description": "Spotify plugin for GrayJay",
     "author": "StandUp2001",
     "authorUrl": "https://github.com/StandUp2001",
-    "sourceUrl": "https://raw.githubusercontent.com/StandUp2001/spotify_plugin/master/spotifyConfig.json",
+    "sourceUrl": "https://raw.githubusercontent.com/StandUp2001/spotify_plugin/plugin/spotifyConfig.json",
     "repositoryUrl": "https://github.com/StandUp2001/spotify_plugin",
     "scriptUrl": "./spotifyScript.js",
     "version": 1,
