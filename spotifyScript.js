@@ -18,12 +18,12 @@ source.enable = function (conf) {
   while (TOKEN === "") {
     TOKEN = getToken();
   }
-  return {
+  return JSON.stringify({
     config: config,
     token: TOKEN,
     client_id: CLIENT_ID,
     secret_id: SECRET_ID,
-  };
+  });
 };
 source.getHome = function () {
   return new QueryPager({ page: 1, page_size: 20 });
