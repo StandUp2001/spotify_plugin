@@ -6,7 +6,7 @@
     "sourceUrl": "https://raw.githubusercontent.com/StandUp2001/spotify_plugin/plugin/spotifyConfig.json",
     "repositoryUrl": "https://github.com/StandUp2001/spotify_plugin",
     "scriptUrl": "./spotifyScript.js",
-    "version": 2,
+    "version": 3,
     "iconUrl": "./someimage.png",
     "id": "b49f7cd4-bc1b-4a2e-ae21-107d40a72094",
     "scriptSignature": "<ommitted>",
