@@ -1,26 +1,29 @@
+"use strict";
+
 //* Constants
-const API_URL = "https://api-v2.soundcloud.com/";
-const APP_LOCALE = "en";
-const PLATFORM = "Soundcloud";
-const PLATFORM_CLAIMTYPE = 16;
-const SOUNDCLOUD_APP_VERSION = "1686222762";
-const USER_AGENT_DESKTOP =
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36";
-const USER_AGENT_MOBILE =
-  "Mozilla/5.0 (Linux; Android 10; Pixel 6a) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36";
+const API_URL = "https://api.spotify.com/v1/";
+const PLATFORM = "Spotify";
 
-const URL_BASE = "https://soundcloud.com";
+const URL_BASE = "https://spotify.com";
 
-let CLIENT_ID = "iZIs9mchVcX5lhVRyQGGAYlNPVldzAoX"; // correct as of June 2023, enable changes this to get the latest
-const URL_ADDITIVE = `&app_version=${SOUNDCLOUD_APP_VERSION}&app_locale=${APP_LOCALE}`;
+const CLIENT_ID = "06bbd8c7c5cc48779dfa300c53479773"; // correct as of Dec 2023, enable changes this to get the latest
+const SECRET_ID = "7b5908b2250641bfba8023d16f499eef";
+let TOKEN = "";
 
 var config = {};
 
 //* Source
 source.enable = function (conf) {
   config = conf ?? {};
-  CLIENT_ID = getClientId();
-  return CLIENT_ID;
+  while (TOKEN === "") {
+    TOKEN = getToken();
+  }
+  return {
+    config: config,
+    token: TOKEN,
+    client_id: CLIENT_ID,
+    secret_id: SECRET_ID,
+  };
 };
 source.getHome = function () {
   return new QueryPager({ page: 1, page_size: 20 });
@@ -323,27 +326,6 @@ function callUrl(url, is_authenticated = false, use_mobile = false) {
 }
 
 /**
- * Gets the client_id from the Soundcloud home page
- * @returns {string} returns the client_id
- */
-function getClientId() {
-  // request soundcloud.com to find the url of the js file that contains 50-_____.js
-  const resp = callUrl("https://soundcloud.com/discover", false, true);
-  const html = resp.body;
-
-  // find "clientId":"iZIs9mchVcX5lhVRyQGGAYlNPVldzAoX"
-  const matched = html.match(/"clientId":"([a-zA-Z0-9-_]+)"/);
-
-  if (!matched) {
-    throw new ScriptException("Could not find client_id");
-  }
-
-  const clientId = matched[1];
-
-  return clientId;
-}
-
-/**
  * Gets the Soundcloud homepage content
  * @param {import("./types").HomeContext} context the search context
  * @returns {PlatformVideo[]} returns the homepage content
@@ -619,6 +601,7 @@ function soundcloudUserToPlatformChannel(scu) {
     subscribers: scu.followers_count,
     description: scu.description,
     url: scu.permalink_url,
+
     links: scu.visuals ? scu.visuals.visuals.map((v) => v.link) : [],
   });
 }
@@ -660,3 +643,20 @@ function soundcloudTrackToPlatformVideo(sct) {
 }
 
 console.log("LOADED");
+
+function getToken() {
+  const url = `https://accounts.spotify.com/api/token`;
+
+  const headers = {
+    Authorization: `Basic ${btoa(`${CLIENT_ID}:${SECRET_ID}`)}`,
+    "Content-Type": "application/x-www-form-urlencoded",
+  };
+
+  const resp = http.POST(url, headers, {
+    grant_type: "client_credentials",
+  });
+
+  const json = JSON.parse(resp.body);
+
+  return json["access_token"] ?? "";
+}
